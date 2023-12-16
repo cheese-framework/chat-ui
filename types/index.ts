@@ -1,12 +1,12 @@
 export interface User {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   token: string;
 }
 
 export interface Chat {
-  id: string;
+  _id: string;
   sender: UserChat;
   receiver: UserChat;
   room: string;
@@ -15,12 +15,20 @@ export interface Chat {
 }
 
 export interface Room {
-  id: string;
-  name: string;
+  _id: string;
+  sender: {
+    id: string;
+    name: string;
+  };
+  receiver: {
+    id: string;
+    name: string;
+  };
   createdBy: string;
   updatedAt: string;
   lastMessage: string;
-  recipient: Array<string>;
+  recipients: Array<string>;
+  exist: boolean;
 }
 
 interface UserChat {
