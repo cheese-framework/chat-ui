@@ -1,4 +1,4 @@
-import { FC, FormEvent, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import styles from "@/styles/Modal.module.css";
 import { Room, User } from "@/types";
 import LoadingDots from "./Loader";
@@ -35,33 +35,6 @@ const UsersModal: FC<Props> = ({ closeModal, userData, rooms, setRooms }) => {
     setLoading(false);
   }, []);
 
-  const createRoom = async (index: number) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.post(
-        `${API_URL}/rooms`,
-        {
-          receiver: { id: users[index]._id, name: users[index].username },
-          sender: { id: userData._id, name: userData.username },
-          createdBy: userData._id,
-          recipients: [userData._id, users[index]._id],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
-      );
-      if (!data.exist) {
-        setRooms([data, ...rooms]);
-      }
-      closeModal();
-    } catch (err) {
-      showErrorMessage(err);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
@@ -91,7 +64,7 @@ const UsersModal: FC<Props> = ({ closeModal, userData, rooms, setRooms }) => {
             <div className={styles.body}>
               <ul>
                 {users.map((user, index) => (
-                  <li key={user._id} onClick={(e) => createRoom(index)}>
+                  <li key={user._id}>
                     <p>
                       <strong>{capitalizeFirstLetter(user.username)}</strong>
                     </p>
